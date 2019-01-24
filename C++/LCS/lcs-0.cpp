@@ -1,5 +1,4 @@
-// 最长公共子序列长度 递归版和迭代版
-// 最长公共子序列内容
+// 获取最长公共子序列长度的递归版和迭代版并获取最长公共子序列之一
 #include <stdio.h>
 #include <string>
 #include <algorithm>
@@ -88,14 +87,14 @@ string GetLCS(string x, string y)
     while (true)
     {
         if (d[i][j] == FROM_UP)
-            j--;
-        else if (d[i][j] == FROM_LEFT)
             i--;
+        else if (d[i][j] == FROM_LEFT)
+            j--;
         else
         {
+            value += x[i];
             i--;
             j--;
-            value += x[i];
         }
         if (i < 0 || j < 0)
             break;
@@ -108,10 +107,10 @@ string GetLCS(string x, string y)
 
 int main(int argc, char const *argv[])
 {
-    string a = "aabcd";
-    string b = "12abcabcd";
-    //printf("1: The longest common subsequence length of %s and %s is %d\n", a.c_str(), b.c_str(), LCS1(a, b));
-    //printf("2: The longest common subsequence length of %s and %s is %d\n", a.c_str(), b.c_str(), LCS2(a, b));
+    string a = "abcd";
+    string b = "acbd";
+    // printf("1: The longest common subsequence length of %s and %s is %d\n", a.c_str(), b.c_str(), LCS1(a, b));
+    // printf("2: The longest common subsequence length of %s and %s is %d\n", a.c_str(), b.c_str(), LCS2(a, b));
     printf("3: The longest common subsequence of %s and %s is %s\n", a.c_str(), b.c_str(), GetLCS(a, b).c_str());
     system("pause");
     return 0;
