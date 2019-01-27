@@ -1,86 +1,44 @@
+// 获取最长公共子序列长度的个数
 #include <iostream>
 #include <cstdio>
-#include <algorithm>
-#include <cstdlib>
 #include <cstring>
-#include <ctime>
-#include <cmath>
+#include <map>
 using namespace std;
-int a[5009] = {0};
-int b[5009] = {0};
-int c[5009] = {0};
-int F[5009] = {0};
-int tf[5009] = {0};
-int S[5009] = {0};
-int ts[5009] = {0};
-int ca = 0, cb = 0;
-int MOD = 100000000;
-char temp;
+
+const int MAXN = 100;
+const int mod = 1e8;
+int n, m;
+int f[MAXN][MAXN] = {0}, g[MAXN][MAXN] = {0};
+
 int main()
 {
-    while (cin >> temp)
+    char S[MAXN] = "0ABCD", T[MAXN] = "0ACBD";
+    n = strlen(S + 1);
+    m = strlen(T + 1);
+    for (int i = 0; i <= m; i++)
+        g[0][i] = 1; //表示第一个序列长度为0时，只有1种LCS方案
+    for (int i = 0; i <= n; i++)
+        g[i][0] = 1; //表示第二个序列长度为0时，只有1种LCS方案
+    for (int i = 1; i <= n; i++)
     {
-        if (temp == '.')
-            break;
-        ca++;
-        a[ca] = temp - 'A' + 1;
-    }
-    while (cin >> temp)
-    {
-        if (temp == '.')
-            break;
-        cb++;
-        b[cb] = temp - 'A' + 1;
-    }
-    for (int i = 1; i <= ca; i++)
-        ts[i] = 1;
-    int nowF, nowS;
-    for (int i = 1; i <= cb; i++)
-    {
-        for (int j = 1; j <= ca; j++)
+        for (int j = 1; j <= m; j++)
         {
-            if (a[j] == b[i])
+            if (S[i] == T[j])
             {
-                nowF = tf[j - 1] + 1;
-                nowS = ts[j - 1];
-                if (tf[j - 1] == 0)
-                    nowS = 1;
-                if (nowF == F[j])
-                {
-                    S[j] += nowS;
-                    S[j] %= MOD;
-                }
-                if (nowF > F[j])
-                {
-                    F[j] = nowF;
-                    S[j] = nowS;
-                    S[j] %= MOD;
-                }
+                f[i][j] = f[i - 1][j - 1] + 1;
+                g[i][j] += g[i - 1][j - 1];
             }
-        }
-        for (int j = 1; j <= ca; j++)
-        {
-            tf[j] = F[j];
-            ts[j] = S[j];
-            if (tf[j - 1] == tf[j])
-            {
-                ts[j] += ts[j - 1];
-                ts[j] %= MOD;
-            }
-            if (tf[j] == 0)
-                ts[j] = 1;
-            if (tf[j - 1] > tf[j])
-            {
-                tf[j] = tf[j - 1];
-                ts[j] = ts[j - 1];
-                ts[j] %= MOD;
-            }
-            if (tf[j] == 0)
-                ts[j] = 1;
+            else
+                f[i][j] = max(f[i - 1][j], f[i][j - 1]);
+            if (f[i][j] == f[i][j - 1])
+                g[i][j] += g[i][j - 1];
+            if (f[i][j] == f[i - 1][j])
+                g[i][j] += g[i - 1][j];
+            if (S[i] != T[j] && f[i][j] == f[i - 1][j - 1])
+                // S[i]与T[j]不匹配时，f[i][j] == f[i - 1][j - 1]表示f[i][j]、f[i][j - 1]、f[i - 1][j]、f[i - 1][j - 1]均相同，此时S[i]和T[j]均未做出贡献，[i - 1][j - 1]->[i - 1][j]->[i][j]与[i - 1][j - 1]->[i][j-1]->[i][j]两个路径是重复的，因此舍去一个g[i - 1][j - 1]
+                g[i][j] -= g[i - 1][j - 1];
         }
     }
-    cout << tf[ca] << endl
-         << ts[ca] << endl;
+    printf("%d\n%d", f[n][m], g[n][m]);
     system("pause");
-    return 0;
 }

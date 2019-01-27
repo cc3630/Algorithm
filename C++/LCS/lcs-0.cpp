@@ -5,9 +5,10 @@
 #include <vector>
 using namespace std;
 
-#define FROM_UP 0
-#define FROM_LEFT 1
-#define FROM_UP_AND_LEFT 2
+#define FROM_UP_AND_LEFT 0
+#define FROM_UP 1
+#define FROM_LEFT 2
+
 
 int LCS1(string x, string y)
 {
