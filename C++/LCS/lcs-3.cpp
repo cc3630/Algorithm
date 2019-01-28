@@ -1,4 +1,4 @@
-// 获取全部最长公共子序列
+// 获取全部最长公共子序列 迭代版
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
